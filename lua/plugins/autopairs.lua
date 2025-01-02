@@ -134,44 +134,5 @@ hi! ScrollbarGitDeleteHandle guifg=#FF7B7B ]]
       }
     end,
   },
-  -- {
-  -- 	'lukas-reineke/indent-blankline.nvim',
-  -- 	main = 'ibl',
-  -- 	opts = {
-  -- 		indent = {
-  -- 			char = '▏',
-  -- 		},
-  -- 		scope = {
-  -- 			show_start = false,
-  -- 			show_end = false,
-  -- 			show_exact_scope = false,
-  -- 		},
-  -- 		exclude = {
-  -- 			filetypes = {
-  -- 				'help',
-  -- 				'startify',
-  -- 				'dashboard',
-  -- 				'packer',
-  -- 				'neogitstatus',
-  -- 				'NvimTree',
-  -- 				'Trouble',
-  -- 			},
-  -- 		},
-  -- 		-- 使用 char_highlight_list 来设置颜色
-  -- 		char_highlight_list = {
-  -- 			'IndentBlanklineChar', -- 设置默认的缩进颜色
-  -- 		},
-  -- 	},
-  -- 	config = function()
-  -- 		local ibl = require 'ibl'
-  --
-  -- 		-- 设置高亮颜色
-  -- 		vim.api.nvim_set_hl(0, 'IndentBlanklineChar', { fg = '#5c6370' }) -- 设置你想要的颜色
-  --
-  -- 		-- 初始化插件
-  -- 		ibl.setup()
-  -- 	end,
-  -- },
-  --{
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 }
