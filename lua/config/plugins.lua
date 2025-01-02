@@ -23,7 +23,6 @@ require('lazy').setup({
   require 'plugins/telescope',
   require 'plugins/lspconfig',
   require 'plugins.cmp',
-  require 'plugins.snippets',
   require 'plugins.autoformatting',
   require 'plugins/gitsigns',
   require 'plugins/which-key',
@@ -39,6 +38,7 @@ require('lazy').setup({
   require 'plugins.conform',
   require 'plugins.project',
   require 'plugins.markdown',
+  require 'plugins.luasnip',
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
