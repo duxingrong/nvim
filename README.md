@@ -1,4 +1,4 @@
-<center><img src="https://github.com/duxingrong/nvim/main/demo.png"></center>
+<center><img src="https://raw.githubusercontent.com/duxingrong/nvim/refs/heads/main/demo.png"></center>
 
 
 ## requirements
