@@ -64,7 +64,14 @@ mv ~/.config/nvim/.tmux.conf ~/
 ```
 
 
+## Thanks
+- [Kicamon](https://github.com/Kicamon/nvim)
+- [theniceboy](https://github.com/theniceboy/nvim/tree/lua-migration)
+- [nvim-lua](https://github.com/nvim-lua/kickstart.nvim) 
+- [dotfiles](https://github.com/hendrikmi/dotfiles/tree/main/nvim)
+---
 
+### License MIT
 
 
 
