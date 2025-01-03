@@ -102,12 +102,12 @@ return {
         pattern = '*',
         callback = function()
           vim.cmd [[
-hi! ScrollbarGitAdd guifg=#8CC85F
-hi! ScrollbarGitAddHandle guifg=#A0CF5D
-hi! ScrollbarGitChange guifg=#E6B450
-hi! ScrollbarGitChangeHandle guifg=#F0C454
-hi! ScrollbarGitDelete guifg=#F87070
-hi! ScrollbarGitDeleteHandle guifg=#FF7B7B ]]
+    hi! ScrollbarGitAdd guifg=#8CC85F
+    hi! ScrollbarGitAddHandle guifg=#A0CF5D
+    hi! ScrollbarGitChange guifg=#E6B450
+    hi! ScrollbarGitChangeHandle guifg=#F0C454
+    hi! ScrollbarGitDelete guifg=#F87070
+    hi! ScrollbarGitDeleteHandle guifg=#FF7B7B ]]
         end,
         group = group,
       })
@@ -135,4 +135,12 @@ hi! ScrollbarGitDeleteHandle guifg=#FF7B7B ]]
     end,
   },
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+  {
+    'kylechui/nvim-surround',
+    version = '*',
+    event = 'VeryLazy',
+    config = function()
+      require('nvim-surround').setup {}
+    end,
+  },
 }
