@@ -1,6 +1,4 @@
-## show my config
-![picture](~/.config/nvim/background/nvim.png) 
-
+<center><img src="https://github.com/duxingrong/nvim/main/demo.png"></center>
 
 
 ## requirements
