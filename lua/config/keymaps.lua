@@ -4,6 +4,7 @@ vim.g.maplocalleader = ' '
 local mode_nv = { 'n', 'v' }
 local mode_v = { 'v' }
 local mode_i = { 'i' }
+local mode_t = { 't' }
 
 local nmappings = {
   { from = 'S',             to = ':w<CR>' },
@@ -37,10 +38,6 @@ local nmappings = {
   { from = '<right>',       to = ':vertical resize+5<CR>' },
 
   -- Tab management
-  { from = 'tu',            to = ':tabe<CR>' },
-  { from = 'tU',            to = ':tab split<CR>' },
-  { from = 'th',            to = ':-tabnext<CR>' },
-  { from = 'tl',            to = ':+tabnext<CR>' },
   { from = 'tmh',           to = ':-tabmove<CR>' },
   { from = 'tml',           to = ':+tabmove<CR>' },
 
@@ -53,7 +50,6 @@ local nmappings = {
   { from = '<leader>pr',    to = ':profile start profile.log<CR>:profile func *<CR>:profile file *<CR>' }, --nvim的性能分析
   { from = '<leader><esc>', to = '<nop>' },
   { from = 'q',             to = '<nop>' },
-  { from = 'KJ',            to = [[<C-\><C-n>]],                                                        desc = 'Exit terminal mode' },
   { from = '<',             to = '<gv',                                                                 mode_v },
   { from = '>',             to = '<gv',                                                                 mode_v },
   { from = '<',             to = '<<' },
@@ -93,7 +89,7 @@ vim.api.nvim_create_autocmd('BufReadPost', {
 vim.keymap.set('n', 'Q', function()
   local buffers = vim.fn.getbufinfo { buflisted = 1 } -- 获取当前所有已列出的缓冲区
   if #buffers > 1 then                                -- 如果有多个缓冲区，执行 bdelete 关闭当前缓冲区
-    vim.cmd 'bdelete'
+    vim.cmd 'bdelete!'
   else                                                -- 否则执行 :q 退出
     vim.cmd 'q'
   end
@@ -111,3 +107,86 @@ vim.keymap.set('n', '<leader>d', function()
     vim.diagnostic.show()                   -- 如果没有诊断信息，显示它
   end
 end, { desc = 'Toggle floating diagnostic message' })
+
+---------------------------------------------------------------------------------------- Terminal ------------------------------------------------------------------------------------------------------
+vim.api.nvim_set_keymap('t', 'KJ', [[<C-\><C-n>]], { noremap = true, desc = 'Exit terminal mode' })
+
+vim.api.nvim_create_autocmd('TermOpen', {
+  group = vim.api.nvim_create_augroup('custom-term-open', { clear = true }),
+  callback = function()
+    vim.opt.number = false
+    vim.opt.relativenumber = false
+  end,
+})
+
+vim.keymap.set('n', 'T', function()
+  vim.cmd.vnew()
+  vim.cmd.term()
+  vim.cmd.wincmd 'J'
+  vim.api.nvim_win_set_height(0, 25)
+  vim.cmd 'startinsert' -- 进入插入模式
+end)
+
+----------------------------------------------------------------------------------------FL Terminal ----------------------------------------------------------------------------------------------------
+
+local state = {
+  floating = {
+    buf = nil, -- 用于存储当前终端的缓冲区
+    win = nil, -- 用于存储当前终端的窗口
+  },
+}
+
+local function create_floating_window(opts)
+  opts = opts or {}
+  local width = opts.width or math.floor(vim.o.columns * 0.8)
+  local height = opts.height or math.floor(vim.o.lines * 0.8)
+
+  -- Calculate the position to center the window
+  local col = math.floor((vim.o.columns - width) / 2)
+  local row = math.floor((vim.o.lines - height) / 2)
+
+  -- Create a buffer for the terminal
+  local buf = vim.api.nvim_create_buf(false, true) -- No file, scratch buffer
+
+  -- Set the buffer to be modifiable
+  vim.api.nvim_buf_set_option(buf, 'modifiable', true)
+
+  -- Define window configuration
+  local win_config = {
+    relative = 'editor',
+    width = width,
+    height = height,
+    col = col,
+    row = row,
+    style = 'minimal',
+    border = 'rounded',
+  }
+
+  -- Create the floating window
+  local win = vim.api.nvim_open_win(buf, true, win_config)
+
+  -- Add terminal content
+  vim.cmd 'terminal'
+
+  -- Enter insert mode after opening the terminal
+  vim.cmd 'startinsert'
+
+  return { buf = buf, win = win }
+end
+
+local toggle_terminal = function()
+  if state.floating.win == nil or not vim.api.nvim_win_is_valid(state.floating.win) then
+    -- Create a new terminal window if the previous one doesn't exist or is invalid
+    state.floating = create_floating_window()
+  else
+    -- Hide the terminal window if it exists
+    vim.api.nvim_win_hide(state.floating.win)
+    state.floating.win = nil -- Clear the stored window ID
+  end
+end
+
+-- Create the command to toggle the terminal
+vim.api.nvim_create_user_command('Floaterminal', toggle_terminal, {})
+
+-- Map <F1> to open/close the floating terminal
+vim.keymap.set({ 'n', 't' }, '<F1>', toggle_terminal, { noremap = true, silent = true })
