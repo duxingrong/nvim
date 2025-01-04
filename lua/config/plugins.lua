@@ -41,6 +41,8 @@ require('lazy').setup({
   require 'plugins.luasnip',
   require 'plugins.misc',
   require 'plugins.snacks',
+  require 'plugins.terminal',
+  require 'plugins.flash',
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the

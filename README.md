@@ -1,6 +1,5 @@
 <center><img src="https://raw.githubusercontent.com/duxingrong/nvim/refs/heads/main/demo.png"></center>
 
-
 ## requirements
 > [!NOTE]
 > work system is  linux

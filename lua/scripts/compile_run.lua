@@ -14,23 +14,30 @@ local compileRun = function()
   elseif ft == 'c' then
     split()
     vim.cmd 'term gcc % -o %< && ./%< && rm %<'
+    vim.cmd 'startinsert'
   elseif ft == 'cpp' then
     split()
     vim.cmd 'term g++ % -o %< && ./%< && rm %<'
+    vim.cmd 'startinsert'
   elseif ft == 'javascript' then
     split()
     vim.cmd 'term node %'
+    vim.cmd 'startinsert'
   elseif ft == 'lua' then
     split()
     vim.cmd 'term luajit %'
+    vim.cmd 'startinsert'
   elseif ft == 'tex' then
     vim.cmd ':VimtexCompile'
+    vim.cmd 'startinsert'
   elseif ft == 'python' then
     split()
     vim.cmd 'term python3 %'
+    vim.cmd 'startinsert'
   elseif ft == 'sh' then
     split()
     vim.cmd 'term bash %'
+    vim.cmd 'startinsert'
   end
 end
 
