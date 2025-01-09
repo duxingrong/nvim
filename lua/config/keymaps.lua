@@ -25,7 +25,6 @@ local nmappings = {
   { from = '<leader>j', to = '<C-w>j' },
   { from = '<leader>h', to = '<C-w>h' },
   { from = '<leader>l', to = '<C-w>l' },
-  { from = 'qf', to = '<C-w>o' },
   { from = 's', to = '<nop>' },
   { from = 'sk', to = ':set nosplitbelow<CR>:split<CR>:set splitbelow<CR>', desc = 'Move focus to the upper window' },
   { from = 'sj', to = ':set splitbelow<CR>:split<CR>', desc = 'Move focus to the lower window' },
@@ -38,13 +37,9 @@ local nmappings = {
   { from = '<right>', to = ':vertical resize+5<CR>' },
 
   -- Other
-  { from = '<leader>sw', to = ':set wrap<CR>' }, --开启自动换行
   { from = '<leader>sc', to = ':set spell!<CR>' }, --检查拼写错误
   { from = '<leader><CR>', to = ':nohlsearch<CR>' }, --取消语法高亮
-  { from = '<f10>', to = ':TSHighlightCapturesUnderCursor<CR>' }, --用于显示光标下的语法捕获组
   { from = '<leader>o', to = 'za' }, --折叠函数
-  { from = '<leader>pr', to = ':profile start profile.log<CR>:profile func *<CR>:profile file *<CR>' }, --nvim的性能分析
-  { from = '<leader><esc>', to = '<nop>' },
   { from = 'q', to = '<nop>' },
   { from = '<', to = '<gv', mode_v },
   { from = '>', to = '<gv', mode_v },

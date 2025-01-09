@@ -76,7 +76,7 @@ return {
     end,
   },
   {
-    'nvim-pack/nvim-spectre', --<leader>F快速查找和替换
+    'nvim-pack/nvim-spectre', --F快速查找和替换
     dependencies = {
       'nvim-lua/plenary.nvim',
     },
