@@ -5,7 +5,7 @@
 > work system is  linux
 
 ```bash
-sudo apt install python3-pip  git clang-format openssh-server g++ build-essential cmake gdb tmux make
+sudo apt install python3-pip  git clang-format openssh-server g++ build-essential cmake gdb tmux make xclip
 sudo snap install nvim --classic
 ```
 
@@ -38,6 +38,7 @@ cargo install --locked --git https://github.com/sxyazi/yazi.git yazi-fm yazi-cli
 > [!TIP]
 > wezterm
 ```bash
+## please install deb if your system is ubuntu20.04
 curl -fsSL https://apt.fury.io/wez/gpg.key | sudo gpg --yes --dearmor -o /etc/apt/keyrings/wezterm-fury.gpg
 echo 'deb [signed-by=/etc/apt/keyrings/wezterm-fury.gpg] https://apt.fury.io/wez/ * *' | sudo tee /etc/apt/sources.list.d/wezterm.list
 sudo apt update
@@ -56,10 +57,10 @@ npm -g install instant-markdown-d
 > [!NOTE]
 > please mv config files
 ```bash
-mv ~/.config/nvim/yazi  ~/.config/
-mv ~/.config/nvim/wezterm  ~/.config/
-mv ~/.config/nvim/pip  ~/.config/
-mv ~/.config/nvim/.tmux.conf ~/
+cp -r ~/.config/nvim/yazi ~/.config/
+cp -r ~/.config/nvim/wezterm ~/.config/
+cp -r ~/.config/nvim/pip ~/.config/
+cp ~/.config/nvim/.tmux.conf ~/
 ```
 
 ## keymap
