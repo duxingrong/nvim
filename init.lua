@@ -13,3 +13,11 @@ vim.cmd "echo 'fake it till you make it'"
 vim.keymap.set('n', '<leader>bg', function()
   vim.cmd 'silent !python3 ~/.config/nvim/lua/scripts/wezterm.py'
 end)
+
+-- 识别 .launch 文件并设置为 xml 文件类型
+vim.cmd [[
+  augroup LaunchFileHighlight
+    autocmd!
+    autocmd BufRead,BufNewFile *.launch set filetype=xml
+  augroup END
+]]
