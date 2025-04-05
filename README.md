@@ -38,11 +38,7 @@ cargo install --locked --git https://github.com/sxyazi/yazi.git yazi-fm yazi-cli
 > [!TIP]
 > wezterm
 ```bash
-## please install deb if your system is ubuntu20.04
-curl -fsSL https://apt.fury.io/wez/gpg.key | sudo gpg --yes --dearmor -o /etc/apt/keyrings/wezterm-fury.gpg
-echo 'deb [signed-by=/etc/apt/keyrings/wezterm-fury.gpg] https://apt.fury.io/wez/ * *' | sudo tee /etc/apt/sources.list.d/wezterm.list
-sudo apt update
-sudo apt install  wezterm
+自动网上下载
 ```
 
 ```pip
@@ -62,6 +58,18 @@ cp -r ~/.config/nvim/wezterm ~/.config/
 cp -r ~/.config/nvim/pip ~/.config/
 cp ~/.config/nvim/.tmux.conf ~/
 ```
+
+> [!WARNING]
+> 这里如果打开nvim报错找不到lazy,使用下面方法fix
+```bash
+# 打开nvim，输入
+:lua= vim.fn.stdpath("data")
+# 记住这个地址
+rm -rf 地址
+git clone --filter=blob:none https://github.com/folke/lazy.nvim.git --branch=stable /home/du/.local/share/nvim/lazy/lazy.nvim
+```
+
+
 
 ## keymap
 | 改键                       | 功能                   |

@@ -1,6 +1,5 @@
 -- ~/.config/nvim/lua/config/plugins.lua
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
---print("[Debug] Lazy path:", lazypath) -- 调试输出
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
     "git",
@@ -12,7 +11,6 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
---print("[Debug] Runtime path:", vim.inspect(vim.opt.rtp:get())) -- 检查路径是否添加
 
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
