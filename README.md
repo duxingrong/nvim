@@ -1,155 +1,169 @@
-<center><img src="https://raw.githubusercontent.com/duxingrong/nvim/refs/heads/main/demo.png"></center>
+# 🚀 Neovim 配置文档
 
-## requirements
-> [!NOTE]
-> work system is  linux
+一个现代化的 Neovim 配置，专注于提供优雅的编辑体验和强大的开发环境。
 
-```bash
-sudo apt install python3-pip  git clang-format openssh-server g++ build-essential cmake gdb tmux make xclip
-sudo snap install nvim --classic
+## ✨ 特性
+
+- 🎨 美观的 UI 和配色方案
+- 🔍 智能的代码补全
+- 🛠 强大的 LSP 支持
+- 📝 自动代码格式化
+- 🌲 集成文件树
+- 🔎 模糊查找
+- ⚡️ 快速启动
+- 🎮 直观的快捷键
+
+## 📁 目录结构
+
+```
+.
+├── 📄 init.lua              # 主配置文件
+├── 📋 lazy-lock.json       # 插件版本锁定文件
+└── 📁 lua/
+    ├── 📁 core/           # 核心配置
+    │   ├── 📄 options.lua  # 基础选项
+    │   └── 📄 keymaps.lua  # 快捷键映射
+    └── 📁 plugins/        # 插件配置
+        ├── 📄 ui.lua       # UI 相关插件
+        ├── 📄 lsp.lua      # LSP 配置
+        ├── 📄 completion.lua # 补全配置
+        └── 📄 utils.lua    # 工具插件
 ```
 
-> [!TIP]
-> node.js
-```bash
-# Download and install nvm:
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+## 🔌 插件系统
 
-# Download and install Node.js:
-nvm install 20
+### 核心插件
 
-# Verify the Node.js version:
-node -v # Should print "v20.18.1".
-nvm current # Should print "v20.18.1".
+1. **UI 增强**
+   - `tokyonight.nvim`: 现代化主题
+   - `lualine.nvim`: 状态栏美化
+   - `nvim-tree.lua`: 文件浏览器
+   - `dashboard-nvim`: 启动界面
+   - `indent-blankline.nvim`: 缩进指示线
 
-# Verify npm version:
-npm -v # Should print "10.8.2".
+2. **编辑增强**
+   - `nvim-autopairs`: 自动括号配对
+   - `Comment.nvim`: 智能注释
+   - `nvim-surround`: 包围修改
+   - `flash.nvim`: 快速跳转
+
+3. **开发工具**
+   - `mason.nvim`: LSP 管理器
+   - `nvim-lspconfig`: LSP 配置
+   - `nvim-cmp`: 代码补全
+   - `conform.nvim`: 代码格式化
+   - `gitsigns.nvim`: Git 集成
+
+## ⌨️ 快捷键
+
+### 基础操作
+- `Space`: Leader 键
+- `S`: 保存文件
+- `kj`: 退出插入模式
+- `Q`: 关闭缓冲区/退出
+
+### 窗口管理
+- `<Leader>h/j/k/l`: 窗口导航
+- `s + h/j/k/l`: 窗口分割
+- 方向键: 调整窗口大小
+
+### 代码导航
+- `gd`: 转到定义
+- `gr`: 查看引用
+- `K`: 显示文档
+- `[d/]d`: 上/下一个诊断
+
+### 代码编辑
+- `<Leader>ca`: 代码操作
+- `<Leader>rn`: 重命名
+- `<Leader>f`: 格式化
+- `gc`: 注释
+
+### 文件操作
+- `<Leader>e`: 文件树
+- `<Leader>ff`: 查找文件
+- `<Leader>fg`: 全文搜索
+- `<Leader>fb`: 缓冲区列表
+
+## 🛠 安装说明
+
+### 前置要求
+
+- Neovim >= 0.8.0
+- Git
+- 一个 [Nerd Font](https://www.nerdfonts.com/) 字体
+- ripgrep (用于全文搜索)
+
+## 🎨 个性化配置
+
+### 更改主题
+
+```lua
+-- 在 lua/plugins/ui.lua 中修改
+require("tokyonight").setup({
+    style = "storm", -- 可选: night, storm, day, moon
+})
 ```
-> [!TIP]
-> yazi  (please installed by cargo)
 
-```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-rustup update
-## new terminal window
-cargo install --locked --git https://github.com/sxyazi/yazi.git yazi-fm yazi-cli
+### 添加 LSP 服务器
+
+```lua
+-- 在 lua/plugins/lsp.lua 中取消注释相应配置
+lspconfig.pyright.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+})
 ```
 
-> [!TIP]
-> wezterm
-```bash
-自动网上下载
+### 配置格式化工具
+
+```lua
+-- 在 lua/plugins/formatting.lua 中取消注释相应配置
+formatters_by_ft = {
+    python = { "black" },
+    lua = { "stylua" },
+}
 ```
 
-```pip
-pip install pynvim
+windows安装gcc
+```powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+irm get.scoop.sh | iex
+scoop install gcc
 ```
 
-```npm
-npm install yarn 
-npm -g install instant-markdown-d
-```
+## 📝 使用技巧
 
-> [!NOTE]
-> please mv config files
-```bash
-cp -r ~/.config/nvim/yazi ~/.config/
-cp -r ~/.config/nvim/wezterm ~/.config/
-cp -r ~/.config/nvim/pip ~/.config/
-cp ~/.config/nvim/.tmux.conf ~/
-```
+1. **高效编辑**
+   - 使用 `gc` 快速注释
+   - 使用 `s` 进行快速跳转
+   - 使用 `<Leader>f` 格式化代码
 
-> [!WARNING]
-> 这里如果打开nvim报错找不到lazy,使用下面方法fix
-```bash
-# 打开nvim，输入
-:lua= vim.fn.stdpath("data")
-# 记住这个地址
-rm -rf 地址
-git clone --filter=blob:none https://github.com/folke/lazy.nvim.git --branch=stable /home/du/.local/share/nvim/lazy/lazy.nvim
-```
+2. **文件管理**
+   - 使用 `<Leader>e` 打开文件树
+   - 使用 `<Leader>ff` 快速查找文件
+   - 使用 `<Leader>fg` 全文搜索
 
+3. **代码导航**
+   - 使用 `gd` 跳转到定义
+   - 使用 `gr` 查看引用
+   - 使用 `gh` 查看文档
 
+## 🤝 贡献
 
-## keymap
-| 改键                       | 功能                   |
-|----------------------------|------------------------|
-| s                          | 没用                   |
-| q                          | 没用                   |
-| S                          | 保存                   |
-| ;                          | :                      |
-| kj                         | <ESC>                  |
-| J                          | 向下7格                |
-| K                          | 向上7格                |
-| N                          | 普通模式下光标回到开头 |
-| M                          | 普通模式下光标移动行尾 |
-| sk                         | 向上分屏               |
-| sj                         | 向下分屏               |
-| sh                         | 向左分屏               |
-| sl                         | 向右分屏               |
-| <leader>k                  | 光标向上跳转           |
-| <leader>j                  | 光标向下跳转           |
-| <leader>h                  | 光标向左跳转           |
-| <leader>l                  | 光标向右跳转           |
-| <up>,<down>,<left>,<right> | 调整窗口大小           |
-| <leader>sc                 | 检查拼写错误           |
-| <leader><CR>               | 取消语法高亮           |
-| <leader>o                  | 折叠函数               |
-| >                          | 向右tab                |
-| <                          | 向左tab                |
-| KJ                         | 终端模式回到普通模式   |
-| <leader>d                  | 关闭诊断               |
-| <leader>q                  | 诊断                   |
+欢迎提交 Issue 和 Pull Request！
 
+## 📜 许可
 
-| 脚本       | 功能                                    |
-|------------|-----------------------------------------|
-| r          | 运行当前文件                            |
-| <leader>ww | 打开wiki,然后<CR>包裹的字体可以创建文件 |
-| <leader>p  | markdown下将剪切板图片粘贴到文件中      |
+MIT License
 
+## 🙏 鸣谢
 
-## 插件
-| 插件名称                        | 快捷键             | 作用                   |
-|---------------------------------|--------------------|------------------------|
-| theniceboy/nvim-deus            | None               | 主题                   |
-| nvim-pack/nvim-spectre          | F                  | 快速查找和替换         |
-| mhinz/vim-startify              | None               | 封面                   |
-| nvimtools/none-ls.nvim          | None               | 对齐lua                |
-| akinsho/bufferline.nvim         | <tab>              | 跳转标签页             |
-| cmp                             | 见cmp.lua          | 自动补全               |
-| tomtom/tcomment_vim             | <leader>cm,uc      | 代码注释和反注释       |
-| stevearc/conform.nvim           | <leader>f          | 主动格式化python,cpp   |
-| folke/flash.nvim                | ss                 | 快速跳转               |
-| Eandrju/cellular-automaton.nvim | <leadr>rr          | funny                  |
-| gitsigns                        | 见gitsigns.lua     | git相关可视化          |
-| lspconfig                       | 见lspconfig.lua    | lsp                    |
-| nvim-lualine/lualine.nvim       | None               | 美观状态栏             |
-| L3MON4D3/LuaSnip                | 代码快             | 自定义代码块           |
-| mg979/vim-visual-multi          | 见multi-cursor.lua | 多光标                 |
-| nvim-neo-tree/neo-tree.nvim     | tt or E            | 打开文件管理器neo-tree |
-| rcarriga/nvim-notify            | None               | 美化通知栏             |
-| airblade/vim-rooter             | None               | 自动更改当前工作目录   |
-| folke/snacks.nvim               | zz                 | 开启专注模式           |
-| nvim-telescope/telescope.nvim   | telescope.lua      | 模糊查找神器           |
-| akinsho/toggleterm.nvim         | : ,T               | 打开终端               |
-| nvim-treesitter/nvim-treesitter | None               | 高亮                   |
-| mbbill/undotree                 | L                  | 打开历史               |
-| folke/which-key.nvim            | None               | 记忆快捷键             |
-| gelguy/wilder.nvim              | None               | 补全和美化命令行       |
-| mikavilpas/yazi.nvim            | 见yazi.lua         | 文件管理器yazi         |
+感谢以下项目：
+- [lazy.nvim](https://github.com/folke/lazy.nvim)
+- [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
+- [以及所有使用的插件](#核心插件)
 
-
-
-
-## Thanks
-- [kicamon](https://github.com/Kicamon/nvim)
-- [theniceboy](https://github.com/theniceboy/nvim/tree/lua-migration)
-- [nvim-lua](https://github.com/nvim-lua/kickstart.nvim) 
-- [dotfiles](https://github.com/hendrikmi/dotfiles/tree/main/nvim)
 ---
 
-### License MIT
-
-
-
+💫 享受编码的乐趣！ 

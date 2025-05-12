@@ -1,85 +1,56 @@
--- NOTE: Plugins can specify dependencies.
---
--- The dependencies are proper plugin specifications as well - anything
--- you do for a plugin at the top level, you can do for a dependency.
---
--- Use the `dependencies` key to specify the dependencies of a particular plugin
-
+-- lua/plugins/telescope.lua
 return {
-  { -- Fuzzy Finder (files, lsp, etc)
-    'nvim-telescope/telescope.nvim',
-    event = 'VimEnter',
-    branch = '0.1.x',
+  {
+    "nvim-telescope/telescope.nvim",
+    tag = '0.1.x', -- 使用稳定版本
+    cmd = "Telescope", -- 命令触发加载
     dependencies = {
-      'nvim-lua/plenary.nvim',
-      { -- If encountering errors, see telescope-fzf-native README for installation instructions
-        'nvim-telescope/telescope-fzf-native.nvim',
-
-        -- `build` is used to run some command when the plugin is installed/updated.
-        -- This is only run then, not every time Neovim starts up.
-        build = 'make',
-
-        -- `cond` is a condition used to determine whether this plugin should be
-        -- installed and loaded.
-        cond = function()
-          return vim.fn.executable 'make' == 1
-        end,
-      },
-      { 'nvim-telescope/telescope-ui-select.nvim' },
-
-      -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      "nvim-lua/plenary.nvim",
+      -- 推荐安装 fzf native 扩展以获得更好的性能
+      { "nvim-telescope/telescope-fzf-native.nvim", build = "make" }
+      -- 注意: Windows 上编译 telescope-fzf-native 可能需要安装 make 工具链
+      -- 可以尝试 `winget install GnuWin32.Make` 或通过 scoop/chocolatey 安装
     },
     config = function()
-      require('telescope').setup {
-
-        extensions = {
-          ['ui-select'] = {
-            require('telescope.themes').get_dropdown(),
-          },
+      local telescope = require("telescope")
+      telescope.setup({
+        defaults = {
+          -- 默认配置...
+          file_ignore_patterns = {"%.git/", "node_modules/", "%.cache/"},
+          layout_strategy = 'horizontal',
+           layout_config = {
+                horizontal = { preview_width = 0.55 },
+           },
+           sorting_strategy = "ascending",
+           border = {},
+           borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
+           color_devicons = true,
         },
-      }
-
-      -- Enable Telescope extensions if they are installed
-      pcall(require('telescope').load_extension, 'fzf')
-      pcall(require('telescope').load_extension, 'ui-select')
-
-      -- See `:help telescope.builtin`
-      local builtin = require 'telescope.builtin'
-      vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })  --搜索帮助文档
-      vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' }) --搜索快捷键
-      vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })--搜索文件
-      vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })  --搜索telescope的函数
-      vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })  --搜索当前光标这个单词
-      vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' }) --在整个工作区搜索
-      vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' }) --搜索文件报错信息
-      vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })  --回复搜索
-      vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' }) --搜索打开过的文件
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })  --选择已经打开的文件
-
-      -- 在当前文件中搜索
-      vim.keymap.set('n', '<leader>/', function()
-        -- You can pass additional configuration to Telescope to change the theme, layout, etc.
-        builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-          winblend = 10,
-          previewer = false,
-        })
-      end, { desc = '[/] Fuzzily search in current buffer' })
-
-      -- 在打开的文件中搜索
-      --  See `:help telescope.builtin.live_grep()` for information about particular keys
-      vim.keymap.set('n', '<leader>s/', function()
-        builtin.live_grep {
-          grep_open_files = true,
-          prompt_title = 'Live Grep in Open Files',
+        pickers = {
+          -- pickers 配置...
+        },
+        extensions = {
+          fzf = {
+            fuzzy = true,                    -- 启用模糊查找
+            override_generic_sorter = true,  -- 重写通用排序器
+            override_file_sorter = true,     -- 重写文件排序器
+            case_mode = "smart_case",        -- 智能大小写模式
+          }
         }
-      end, { desc = '[S]earch [/] in Open Files' })
+      })
+      -- 加载 fzf native 扩展
+      pcall(telescope.load_extension, "fzf")
 
-      -- 在配置文件中搜索
-      vim.keymap.set('n', '<leader>sn', function()
-        builtin.find_files { cwd = vim.fn.stdpath 'config' }
-      end, { desc = '[S]earch [N]eovim files' })
-    end,
-  },
+      -- 定义快捷键
+      local keymap = vim.keymap.set
+      local opts = { noremap = true, silent = true }
+      keymap('n', '<leader>ff', '<cmd>Telescope find_files<cr>', { desc = 'Find Files' })
+      keymap('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', { desc = 'Live Grep' })
+      keymap('n', '<leader>fb', '<cmd>Telescope buffers<cr>', { desc = 'Find Buffers' })
+      keymap('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', { desc = 'Help Tags' })
+      keymap('n', '<leader>fo', '<cmd>Telescope oldfiles<cr>', { desc = 'Find Old Files' })
+      keymap('n', '<leader>gc', '<cmd>Telescope git_commits<cr>', {desc = 'Git Commits'})
+      keymap('n', '<leader>gs', '<cmd>Telescope git_status<cr>', {desc = 'Git Status'})
+    end
+  }
 }
--- vim: ts=2 sts=2 sw=2 et
