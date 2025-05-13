@@ -1,72 +1,56 @@
--- ~/.config/nvim/lua/config/plugins.lua
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
---print("[Debug] Lazy path:", lazypath) -- 调试输出
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- 使用稳定分支
-    lazypath,
-  })
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+	local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
+	local out = vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
+	if vim.v.shell_error ~= 0 then
+		vim.api.nvim_echo({
+			{ 'Failed to clone lazy.nvim:\n', 'ErrorMsg' },
+			{ out,                            'WarningMsg' },
+			{ '\nPress any key to exit...' },
+		}, true, {})
+		vim.fn.getchar()
+		os.exit(1)
+	end
 end
 vim.opt.rtp:prepend(lazypath)
---print("[Debug] Runtime path:", vim.inspect(vim.opt.rtp:get())) -- 检查路径是否添加
 
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 
-require('lazy').setup({
-
-  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
-
-  require 'plugins/colorscheme',
-  require 'plugins.neo-tree',
-  require 'plugins.bufferline',
-  require 'plugins.lualine',
-  require 'plugins.treesitter',
-  require 'plugins/telescope',
-  require 'plugins/lspconfig',
-  require 'plugins.cmp',
-  require 'plugins.autoformatting',
-  require 'plugins/gitsigns',
-  require 'plugins/which-key',
-  require 'plugins/alpha',
-  require 'plugins.autopairs',
-  require 'plugins.comment',
-  require 'plugins.fun',
-  require 'plugins.notify',
-  require 'plugins.yazi',
-  require 'plugins.multi-cursor',
-  require 'plugins.undo',
-  require 'plugins.wilder',
-  require 'plugins.conform',
-  require 'plugins.project',
-  require 'plugins.markdown',
-  require 'plugins.luasnip',
-  require 'plugins.misc',
-  require 'plugins.snacks',
-  require 'plugins.terminal',
-  require 'plugins.flash',
-}, {
-  ui = {
-    -- If you are using a Nerd Font: set icons to an empty table which will use the
-    -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
-    icons = vim.g.have_nerd_font and {} or {
-      cmd = '⌘',
-      config = '🛠',
-      event = '📅',
-      ft = '📂',
-      init = '⚙',
-      keys = '🗝',
-      plugin = '🔌',
-      runtime = '💻',
-      require = '🌙',
-      source = '📄',
-      start = '🚀',
-      task = '📌',
-      lazy = '💤 ',
-    },
-  },
-})
+require('lazy').setup {
+	spec = {
+		-- import your plugins
+		{ import = 'plugins' }, -- 导入`./lua/plugins/`目录下的所有lua文件
+	},
+	-- Configure any other settings here. See the documentation for more details.
+	-- colorscheme that will be used when installing plugins.
+	install = { colorscheme = { 'habamax' } },
+	-- automatically check for plugin updates
+	checker = { enabled = false },
+	ui = {
+		-- The border to use for the UI window. Accepts same border values as |nvim_open_win()|.
+		border = 'rounded',
+	},
+	{
+		ui = {
+			-- If you are using a Nerd Font: set icons to an empty table which will use the
+			-- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
+			icons = vim.g.have_nerd_font and {} or {
+				cmd = '⌘',
+				config = '🛠',
+				event = '📅',
+				ft = '📂',
+				init = '⚙',
+				keys = '🗝',
+				plugin = '🔌',
+				runtime = '💻',
+				require = '🌙',
+				source = '📄',
+				start = '🚀',
+				task = '📌',
+				lazy = '💤 ',
+			},
+		},
+	},
+}

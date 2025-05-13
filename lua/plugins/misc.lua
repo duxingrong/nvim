@@ -12,11 +12,4 @@ return {
     -- GitHub integration for vim-fugitive
     'tpope/vim-rhubarb',
   },
-  {
-    -- high-performance color highlighter
-    'norcalli/nvim-colorizer.lua',
-    config = function()
-      require('colorizer').setup()
-    end,
-  },
 }

@@ -1,210 +1,351 @@
-local setCompHL = function()
-  local fgdark = '#2E3440'
-
-  vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', { fg = '#82AAFF', bg = 'NONE', bold = true })
-  vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', { fg = '#82AAFF', bg = 'NONE', bold = true })
-  vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated', { fg = '#7E8294', bg = 'NONE', strikethrough = true })
-
-  vim.api.nvim_set_hl(0, 'CmpItemMenu', { fg = '#808080', bg = 'NONE', italic = true })
-  vim.api.nvim_set_hl(0, 'CmpItemKindField', { fg = fgdark, bg = '#B5585F' })
-  vim.api.nvim_set_hl(0, 'CmpItemKindProperty', { fg = fgdark, bg = '#B5585F' })
-  vim.api.nvim_set_hl(0, 'CmpItemKindEvent', { fg = fgdark, bg = '#B5585F' })
-
-  vim.api.nvim_set_hl(0, 'CmpItemKindText', { fg = fgdark, bg = '#9FBD73' })
-  vim.api.nvim_set_hl(0, 'CmpItemKindEnum', { fg = fgdark, bg = '#9FBD73' })
-  vim.api.nvim_set_hl(0, 'CmpItemKindKeyword', { fg = fgdark, bg = '#9FBD73' })
-
-  vim.api.nvim_set_hl(0, 'CmpItemKindConstant', { fg = fgdark, bg = '#D4BB6C' })
-  vim.api.nvim_set_hl(0, 'CmpItemKindConstructor', { fg = fgdark, bg = '#D4BB6C' })
-  vim.api.nvim_set_hl(0, 'CmpItemKindReference', { fg = fgdark, bg = '#D4BB6C' })
-
-  vim.api.nvim_set_hl(0, 'CmpItemKindFunction', { fg = fgdark, bg = '#A377BF' })
-  vim.api.nvim_set_hl(0, 'CmpItemKindStruct', { fg = fgdark, bg = '#A377BF' })
-  vim.api.nvim_set_hl(0, 'CmpItemKindClass', { fg = fgdark, bg = '#A377BF' })
-  vim.api.nvim_set_hl(0, 'CmpItemKindModule', { fg = fgdark, bg = '#A377BF' })
-  vim.api.nvim_set_hl(0, 'CmpItemKindOperator', { fg = fgdark, bg = '#A377BF' })
-
-  vim.api.nvim_set_hl(0, 'CmpItemKindVariable', { fg = fgdark, bg = '#cccccc' })
-  vim.api.nvim_set_hl(0, 'CmpItemKindFile', { fg = fgdark, bg = '#7E8294' })
-
-  vim.api.nvim_set_hl(0, 'CmpItemKindUnit', { fg = fgdark, bg = '#D4A959' })
-  vim.api.nvim_set_hl(0, 'CmpItemKindSnippet', { fg = fgdark, bg = '#D4A959' })
-  vim.api.nvim_set_hl(0, 'CmpItemKindFolder', { fg = fgdark, bg = '#D4A959' })
-
-  vim.api.nvim_set_hl(0, 'CmpItemKindMethod', { fg = fgdark, bg = '#6C8ED4' })
-  vim.api.nvim_set_hl(0, 'CmpItemKindValue', { fg = fgdark, bg = '#6C8ED4' })
-  vim.api.nvim_set_hl(0, 'CmpItemKindEnumMember', { fg = fgdark, bg = '#6C8ED4' })
-
-  vim.api.nvim_set_hl(0, 'CmpItemKindInterface', { fg = fgdark, bg = '#58B5A8' })
-  vim.api.nvim_set_hl(0, 'CmpItemKindColor', { fg = fgdark, bg = '#58B5A8' })
-  vim.api.nvim_set_hl(0, 'CmpItemKindTypeParameter', { fg = fgdark, bg = '#58B5A8' })
-end
-
-local has_words_before = function()
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match '%s' == nil
-end
-
-local moveCursorBeforeComma = function()
-  if vim.bo.filetype ~= 'dart' then
-    return
-  end
-  vim.defer_fn(function()
-    local line = vim.api.nvim_get_current_line()
-    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-    local char = line:sub(col - 2, col)
-    if char == ': ,' then
-      vim.api.nvim_win_set_cursor(0, { row, col - 1 })
-    end
-  end, 100)
-end
-
 return {
+	{
+		'saghen/blink.cmp',
+		-- optional: provides snippets for the snippet source
+		dependencies = {
+			-- 'rafamadriz/friendly-snippets'
+			'nvim-tree/nvim-web-devicons',
+			'onsails/lspkind.nvim',
+			'fang2hou/blink-copilot',
+			'folke/lazydev.nvim',
+		},
 
-  { -- Autocompletion
-    'hrsh7th/nvim-cmp',
+		-- use a release tag to download pre-built binaries
+		version = '1.*',
+		-- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
+		-- build = 'cargo build --release',
+		-- If you use nix, you can build from source using latest nightly rust with:
+		-- build = 'nix run .#build-plugin',
 
-    event = 'InsertEnter',
+		---@module 'blink.cmp'
+		---@type blink.cmp.Config
+		opts = {
+			-- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
+			-- 'super-tab' for mappings similar to vscode (tab to accept)
+			-- 'enter' for enter to accept
+			-- 'none' for no mappings
+			--
+			-- All presets have the following mappings:
+			-- C-space: Open menu or open docs if already open
+			-- C-n/C-p or Up/Down: Select next/previous item
+			-- C-e: Hide menu
+			-- C-k: Toggle signature help (if signature.enabled = true)
+			--
+			-- See :h blink-cmp-config-keymap for defining your own keymap
+			keymap = {
+				-- If the command/function returns false or nil, the next command/function will be run.
+				preset = 'none',
+				['<Tab>'] = {
+					function(cmp)
+						return cmp.select_next { auto_insert = true }
+					end,
+					'fallback',
+				},
+				['<S-Tab>'] = {
+					function(cmp)
+						return cmp.select_prev { auto_insert == true }
+					end,
+					'fallback',
+				},
 
-    dependencies = {
+				['<C-u>'] = { 'scroll_documentation_up', 'fallback' },
+				['<C-d>'] = { 'scroll_documentation_down', 'fallback' },
 
-      'L3MON4D3/LuaSnip', -- 使用 LuaSnip
+				['<CR>'] = {
+					function(cmp)
+						return cmp.accept()
+					end,
+					'fallback',
+				},
+				-- Close current completion and insert a newline
+				['<S-CR>'] = {
+					function(cmp)
+						cmp.hide()
+						return false
+					end,
+					'fallback',
+				},
 
-      'hrsh7th/cmp-nvim-lsp',
+				-- Show/Remove completion
+				['<A-/>'] = {
+					function(cmp)
+						if cmp.is_menu_visible() then
+							return cmp.hide()
+						else
+							return cmp.show()
+						end
+					end,
+					'fallback',
+				},
 
-      'hrsh7th/cmp-path',
+				['<A-n>'] = {
+					function(cmp)
+						cmp.show { providers = { 'buffer' } }
+					end,
+				},
+				['<A-p>'] = {
+					function(cmp)
+						cmp.show { providers = { 'buffer' } }
+					end,
+				},
+			},
 
-      'saadparwaiz1/cmp_luasnip', -- 使用 cmp_luasnip 来支持 LuaSnip
-    },
+			appearance = {
+				-- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+				-- Adjusts spacing to ensure icons are aligned
+				nerd_font_variant = 'normal',
+			},
 
-    config = function()
-      local cmp = require 'cmp'
-      local luasnip = require 'luasnip'
+			-- Default list of enabled providers defined so that you can extend it
+			-- elsewhere in your config, without redefining it, due to `opts_extend`
+			sources = {
+				default = function()
+					local success, node = pcall(vim.treesitter.get_node)
+					if success and node and vim.tbl_contains({ 'comment', 'line_comment', 'block_comment' }, node:type()) then
+						return { 'buffer' }
+					else
+						return { 'lazydev', 'copilot', 'lsp', 'path', 'snippets', 'buffer' }
+					end
+				end,
+				per_filetype = {
+					codecompanion = { 'codecompanion' },
+				},
 
-      setCompHL()
+				providers = {
+					lazydev = {
+						name = 'LazyDev',
+						module = 'lazydev.integrations.blink',
+						-- make lazydev completions top priority (see `:h blink.cmp`)
+						score_offset = 95,
+					},
+					copilot = {
+						name = 'copilot',
+						module = 'blink-copilot',
+						score_offset = 100,
+						async = true,
+						opts = {
+							kind_icon = '',
+							kind_hl = 'DevIconCopilot',
+						},
+					},
+					path = {
+						score_offset = 95,
+						opts = {
+							get_cwd = function(_)
+								return vim.fn.getcwd()
+							end,
+						},
+					},
+					buffer = {
+						score_offset = 20,
+					},
+					lsp = {
+						-- Default
+						-- Filter text items from the LSP provider, since we have the buffer provider for that
+						transform_items = function(_, items)
+							return vim.tbl_filter(function(item)
+								return item.kind ~= require('blink.cmp.types').CompletionItemKind.Text
+							end, items)
+						end,
+						score_offset = 60,
+						fallbacks = { 'buffer' },
+					},
+					-- Hide snippets after trigger character
+					-- Trigger characters are defined by the sources. For example, for Lua, the trigger characters are ., ", '.
+					snippets = {
+						score_offset = 70,
+						should_show_items = function(ctx)
+							return ctx.trigger.initial_kind ~= 'trigger_character'
+						end,
+						fallbacks = { 'buffer' },
+					},
+					cmdline = {
+						min_keyword_length = 2,
+						-- Ignores cmdline completions when executing shell commands
+						enabled = function()
+							return vim.fn.getcmdtype() ~= ':' or not vim.fn.getcmdline():match "^[%%0-9,'<>%-]*!"
+						end,
+					},
+				},
+			},
 
-      -- 配置自动补全
-      cmp.setup {
-        preselect = cmp.PreselectMode.None, -- 禁止自动预选第一行
+			-- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
+			-- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
+			-- when the Rust fuzzy matcher is not available, by using `implementation = "prefer_rust"`
+			--
+			-- See the fuzzy documentation for more information
+			fuzzy = {
+				implementation = 'prefer_rust_with_warning',
+				sorts = {
+					'exact',
+					-- defaults
+					'score',
+					'sort_text',
+				},
+			},
 
-        snippet = {
-          expand = function(args)
-            -- 使用 LuaSnip 扩展片段
-            luasnip.lsp_expand(args.body)
-          end,
-        },
+			completion = {
+				-- NOTE: some LSPs may add auto brackets themselves anyway
+				accept = { auto_brackets = { enabled = true } },
+				list = { selection = { preselect = true, auto_insert = false } },
+				menu = {
+					border = 'rounded',
+					max_height = 20,
+					draw = {
+						columns = { { 'label', 'label_description', gap = 1 }, { 'kind_icon', 'kind' } },
+						components = {
+							kind_icon = {
+								ellipsis = false,
+								text = function(ctx)
+									local icon = ctx.kind_icon
+									if icon then
+										-- Do nothing
+									elseif vim.tbl_contains({ 'Path' }, ctx.source_name) then
+										local dev_icon, _ = require('nvim-web-devicons').get_icon(ctx.label)
+										if dev_icon then
+											icon = dev_icon
+										end
+									else
+										icon = require('lspkind').symbolic(ctx.kind, { mode = 'symbol' })
+									end
+									return icon .. ctx.icon_gap
+								end,
+								-- Optionally, use the highlight groups from nvim-web-devicons
+								-- You can also add the same function for `kind.highlight` if you want to
+								-- keep the highlight groups in sync with the icons.
+								highlight = function(ctx)
+									local hl = ctx.kind_hl
+									if hl then
+										-- Do nothing
+									elseif vim.tbl_contains({ 'Path' }, ctx.source_name) then
+										local dev_icon, dev_hl = require('nvim-web-devicons').get_icon(ctx.label)
+										if dev_icon then
+											hl = dev_hl
+										end
+									end
+									return hl
+								end,
+							},
+						},
+					},
+				},
+				documentation = {
+					auto_show = true,
+					-- Delay before showing the documentation window
+					auto_show_delay_ms = 200,
+					window = {
+						min_width = 10,
+						max_width = 120,
+						max_height = 20,
+						border = 'rounded',
+						winblend = 0,
+						winhighlight = 'Normal:BlinkCmpDoc,FloatBorder:BlinkCmpDocBorder,EndOfBuffer:BlinkCmpDoc',
+						-- Note that the gutter will be disabled when border ~= 'none'
+						scrollbar = true,
+						-- Which directions to show the documentation window,
+						-- for each of the possible menu window directions,
+						-- falling back to the next direction when there's not enough space
+						direction_priority = {
+							menu_north = { 'e', 'w', 'n', 's' },
+							menu_south = { 'e', 'w', 's', 'n' },
+						},
+					},
+				},
+				-- Displays a preview of the selected item on the current line
+				ghost_text = {
+					enabled = true,
+					-- Show the ghost text when an item has been selected
+					show_with_selection = true,
+					-- Show the ghost text when no item has been selected, defaulting to the first item
+					show_without_selection = false,
+					-- Show the ghost text when the menu is open
+					show_with_menu = true,
+					-- Show the ghost text when the menu is closed
+					show_without_menu = true,
+				},
+			},
 
-        -- 快捷键配置
-        mapping = cmp.mapping.preset.insert {
+			signature = {
+				enabled = true,
+				window = {
+					min_width = 1,
+					max_width = 100,
+					max_height = 10,
+					border = 'single', -- Defaults to `vim.o.winborder` on nvim 0.11+ or 'padded' when not defined/<=0.10
+					winblend = 0,
+					winhighlight = 'Normal:BlinkCmpSignatureHelp,FloatBorder:BlinkCmpSignatureHelpBorder',
+					scrollbar = false, -- Note that the gutter will be disabled when border ~= 'none'
+					-- Which directions to show the window,
+					-- falling back to the next direction when there's not enough space,
+					-- or another window is in the way
+					direction_priority = { 'n' },
+					-- Disable if you run into performance issues
+					treesitter_highlighting = true,
+					show_documentation = true,
+				},
+			},
 
-          ['<Tab>'] = cmp.mapping {
-            i = function(fallback)
-              if cmp.visible() then
-                cmp.select_next_item { behavior = cmp.SelectBehavior.Insert }
-                moveCursorBeforeComma()
-              elseif has_words_before() then
-                cmp.complete()
-                moveCursorBeforeComma()
-              else
-                fallback()
-              end
-            end,
-          },
-          ['<S-Tab>'] = cmp.mapping {
-            i = function(fallback)
-              if cmp.visible() then
-                cmp.select_prev_item { behavior = cmp.SelectBehavior.Insert }
-                moveCursorBeforeComma()
-              else
-                fallback()
-              end
-            end,
-          },
+			cmdline = {
+				completion = {
+					menu = {
+						auto_show = true,
+					},
+				},
+				keymap = {
+					preset = 'none',
+					['<A-j>'] = {
+						function(cmp)
+							return cmp.select_next { auto_insert = false }
+						end,
+						'fallback',
+					},
+					['<A-k>'] = {
+						function(cmp)
+							return cmp.select_prev { auto_insert = false }
+						end,
+						'fallback',
+					},
+					['<C-p>'] = {
+						function(cmp)
+							return cmp.select_prev { auto_insert = false }
+						end,
+						'fallback',
+					},
+					['<C-n>'] = {
+						function(cmp)
+							return cmp.select_next { auto_insert = false }
+						end,
+						'fallback',
+					},
+					['<Tab>'] = {
+						function(cmp)
+							return cmp.accept()
+						end,
+						'fallback',
+					},
+					['<CR>'] = {
+						function(cmp)
+							if vim.fn.getcmdtype() == ':' then
+								return cmp.accept_and_enter()
+							end
+							return false
+						end,
+						'fallback',
+					},
+					['<A-/>'] = {
+						function(cmp)
+							if cmp.is_menu_visible() then
+								return cmp.hide()
+							else
+								return cmp.show()
+							end
+						end,
+						'fallback',
+					},
+				},
+			},
+		},
 
-          -- 文档滚动
-          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-          ['<C-f>'] = cmp.mapping.scroll_docs(4),
-
-          -- 确认补全
-          ['<C-y>'] = cmp.mapping.confirm { select = true },
-
-          -- 手动触发补全
-          ['<C-Space>'] = cmp.mapping.complete {},
-
-          -- 使用 <C-e> 来扩展片段
-          ['<C-e>'] = cmp.mapping(function()
-            if luasnip.expand_or_jumpable() then
-              luasnip.expand_or_jump()
-            end
-          end, { 'i', 's' }),
-
-          -- 使用 <C-j> 跳转到下一个位置
-          ['<C-j>'] = cmp.mapping(function()
-            if luasnip.jumpable(1) then
-              luasnip.jump(1)
-            end
-          end, { 'i', 's' }),
-
-          -- 使用 <C-k> 跳转到上一个位置
-          ['<C-k>'] = cmp.mapping(function()
-            if luasnip.jumpable(-1) then
-              luasnip.jump(-1)
-            end
-          end, { 'i', 's' }),
-        },
-
-        -- 补全来源
-        sources = {
-          { name = 'nvim_lsp' },
-          { name = 'path' },
-          { name = 'luasnip' },
-        },
-
-        -- 格式化补全项
-        formatting = {
-          fields = { 'kind', 'abbr', 'menu' },
-          format = function(entry, vim_item)
-            local kind_icons = {
-              Text = ' ',
-              Method = 'm',
-              Function = 'ƒ',
-              Constructor = '',
-              Field = '',
-              Variable = '',
-              Class = '',
-              Interface = 'ﰮ',
-              Module = '',
-              Property = '',
-              Unit = '',
-              Value = '',
-              Enum = 'ℰ',
-              Keyword = '',
-              Snippet = '',
-              Color = '',
-              File = '',
-              Reference = '',
-              Folder = '',
-              EnumMember = '',
-              Constant = '',
-              Struct = '',
-              Event = '',
-              Operator = '',
-              TypeParameter = '',
-            }
-
-            vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind)
-
-            vim_item.menu = ({
-              nvim_lsp = '[LSP]',
-              luasnip = '[Snippet]',
-              buffer = '[Buffer]',
-              path = '[Path]',
-            })[entry.source.name]
-
-            return vim_item
-          end,
-        },
-      }
-    end,
-  },
+		opts_extend = { 'sources.default' },
+	},
 }
