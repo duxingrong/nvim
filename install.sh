@@ -96,8 +96,8 @@ sudo mv "$DEPS_DIR/node-v22.19.0-linux-x64" /usr/local/nodejs
 add_to_bashrc 'export PATH="/usr/local/nodejs/bin:$PATH"'
 
 # 步骤 5: 安装 Google Chrome
-echo -e "\n${INFO}--> 正在安装 Google Chrome...${NC}"
-sudo apt install -y "$DEPS_DIR/google-chrome-stable_current_amd64.deb"
+# echo -e "\n${INFO}--> 正在安装 Google Chrome...${NC}"
+# sudo apt install -y "$DEPS_DIR/google-chrome-stable_current_amd64.deb"
 
 # 步骤 6: 安装 Clash Verge
 echo -e "\n${INFO}--> 正在安装 Clash Verge...${NC}"
