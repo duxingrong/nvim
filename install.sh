@@ -12,8 +12,8 @@ NC='\033[0m' # No Color
 
 # --- 脚本路径设置 ---
 # 获取脚本所在的目录，确保我们能找到'dependence'文件夹
-SCRIPT_DIR = $(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
-DEPS_DIR = "$SCRIPT_DIR/dependence"
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+DEPS_DIR="$SCRIPT_DIR/dependence"
 
 # --- 辅助函数：向.bashrc添加配置，避免重复 ---
 add_to_bashrc() {
@@ -56,7 +56,7 @@ echo -e "\n${INFO}--> 正在安装 Yazi...${NC}"
 # 确保 ~/.local/bin 存在
 mkdir -p "$HOME/.local/bin"
 unzip -o "$DEPS_DIR/yazi-x86_64-unknown-linux-musl.zip" -d "$DEPS_DIR"
-mv "$DEPS_DIR/ya" "$DEPS_DIR/yazi" "$DEPS_DIR/yazi-cli" "$HOME/.local/bin/"
+mv "$DEPS_DIR/yazi-x86_64-unknown-linux-musl/ya" "$DEPS_DIR/yazi-x86_64-unknown-linux-musl/yazi"  "$HOME/.local/bin/"
 echo -e "${INFO}--> 正在配置 Yazi 的 PATH 和快捷键...${NC}"
 add_to_bashrc 'export PATH="$HOME/.local/bin:$PATH"'
 
