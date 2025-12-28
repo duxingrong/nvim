@@ -16,8 +16,6 @@ local nmappings = {
 	{ from = 'N',            to = '0',                                                   mode = mode_nv },
 	{ from = 'M',            to = '$',                                                   mode = mode_nv },
 
-	--c++神器
-	{ from = '<c-y>',        to = '<ESC>A {}<ESC>i<CR><ESC>ko',                          mode = mode_i },
 	{ from = '<leader>k',    to = '<C-w>k' },
 	{ from = '<leader>j',    to = '<C-w>j' },
 	{ from = '<leader>h',    to = '<C-w>h' },
@@ -33,8 +31,6 @@ local nmappings = {
 	{ from = '<left>',       to = ':vertical resize-5<CR>' },
 	{ from = '<right>',      to = ':vertical resize+5<CR>' },
 
-	-- Other
-	{ from = '<leader>sc',   to = ':set spell!<CR>' }, --检查拼写错误
 	{ from = '<leader><CR>', to = ':nohlsearch<CR>' }, --取消语法高亮
 	{ from = '<leader>o',    to = 'za' },              --折叠函数
 	{ from = 'q',            to = '<nop>' },
@@ -42,6 +38,11 @@ local nmappings = {
 	{ from = '>',            to = '<gv',                                                 mode_v },
 	{ from = '<',            to = '<<' },
 	{ from = '>',            to = '>>' },
+	-- Tab(标签页) 操作
+    { from = 'th',           to = ':tabprevious<CR>', desc = 'Go to previous tab' },
+    { from = 'tl',           to = ':tabnext<CR>',     desc = 'Go to next tab' },
+    { from = 'tH',           to = ':tabmove -1<CR>',  desc = 'Move tab to left' },
+    { from = 'tL',           to = ':tabmove +1<CR>',  desc = 'Move tab to right' },
 }
 
 --循环设置案件映射

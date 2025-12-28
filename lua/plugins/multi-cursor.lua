@@ -16,5 +16,5 @@ let g:VM_maps["Undo"]               = 'l'
 let g:VM_maps["Redo"]               = '<C-r>'
 noremap <leader>sa <Plug>(VM-Select-All)
 ]])
-	end
+	end,
 }

@@ -1,15 +1,22 @@
 return {
-	"nvim-treesitter/playground",
 	{
 		"nvim-treesitter/nvim-treesitter",
 		lazy = false,
 		priority = 1000,
 		build = ":TSUpdate",
+
 		config = function()
+			-- 关闭 Vim 原生的智能缩进
 			vim.opt.smartindent = false
+
 			require("nvim-treesitter.configs").setup({
+				-- 自动安装缺失的解析器
 				auto_install = true,
+
+				-- 同步安装设为 false 避免卡顿
 				sync_install = false,
+
+				-- 确保安装的语言列表
 				ensure_installed = {
 					"markdown",
 					"html",
@@ -30,11 +37,19 @@ return {
 					"dockerfile",
 					"yaml",
 					"python",
+					"luadoc",
+					"vimdoc", -- 建议加上这两个，用于 vim 帮助文档高亮
 				},
+
+				-- 模块 1：语法高亮
 				highlight = {
 					enable = true,
-					disable = {}, -- list of language that will be disabled
+					disable = {},
+					-- 某些大文件可能会卡顿，可以开启这个选项（可选）
+					additional_vim_regex_highlighting = false,
 				},
+
+				-- 模块 2：缩进
 				indent = {
 					enable = true,
 					disable = function(lang, bufnr)
@@ -42,38 +57,40 @@ return {
 						return vim.tbl_contains(disallowed_filetypes, lang)
 					end,
 				},
+
+				-- 模块 3：增量选择
 				incremental_selection = {
 					enable = true,
 					keymaps = {
-						init_selection    = "<c-n>",
-						node_incremental  = "<c-n>",
-						node_decremental  = "<c-h>",
+						init_selection = "<c-n>",
+						node_incremental = "<c-n>",
+						node_decremental = "<c-h>",
 					},
-				}
+				},
 			})
-		end
+		end,
 	},
+
 	{
 		"nvim-treesitter/nvim-treesitter-context",
 		config = function()
-			local tscontext = require('treesitter-context')
-			tscontext.setup {
+			local tscontext = require("treesitter-context")
+			tscontext.setup({
 				enable = true,
-				max_lines = 0,        -- How many lines the window should span. Values <= 0 mean no limit
-				min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+				max_lines = 0,
+				min_window_height = 0,
 				line_numbers = true,
-				multiline_threshold = 20, -- Maximum number of lines to collapse for a single context line
-				trim_scope = 'outer', -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
-				mode = 'cursor',      -- Line used to calculate context. Choices: 'cursor', 'topline'
-				-- Separator between context and content. Should be a single character string, like '-'.
-				-- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+				multiline_threshold = 20,
+				trim_scope = "outer",
+				mode = "cursor",
 				separator = nil,
-				zindex = 20, -- The Z-index of the context window
-				on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
-			}
+				zindex = 20,
+				on_attach = nil,
+			})
+
 			vim.keymap.set("n", "[c", function()
 				tscontext.go_to_context()
 			end, { silent = true })
-		end
+		end,
 	},
 }

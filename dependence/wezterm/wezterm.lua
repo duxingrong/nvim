@@ -6,7 +6,7 @@ local act = wezterm.action --用于设置鼠标等动作
 local config = {
   default_prog = { 'tmux' },
   disable_default_key_bindings = true,
-  window_background_image = '/home/du/Pictures/Screenshots/1.png',
+  window_background_image = '/home/du/.config/nvim/background/7.png',
   window_background_image_hsb = { brightness = 0.1 },
   use_fancy_tab_bar = false, -- 顶部状态栏的样式
   show_new_tab_button_in_tab_bar = false, -- 隐藏新建窗口的加号
@@ -24,7 +24,7 @@ local config = {
     bottom = 5,
   },
 
-  font_size = 13, -- 字体大小
+  font_size = 10, -- 字体大小
   -- font = wezterm.font( -- 字体样式
   -- 	"ComicShannsMono Nerd Font",
   -- 	{ weight = "Regular" }

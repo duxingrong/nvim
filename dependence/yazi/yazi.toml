@@ -1,0 +1,43 @@
+# ~/.config/yazi/yazi.toml
+
+[mgr]
+# 1. 默认显示隐藏文件 (对应你的第一个需求)
+show_hidden = true
+sort_by     = "alphabetical"
+sort_sensitive = false
+sort_reverse = false
+sort_dir_first = true
+linemode    = "none"
+show_symlink = true
+
+[opener]
+# 定义一个名为 "edit" 的打开器，使用 nvim
+# block = true 表示打开时挂起 yazi，直到 nvim 关闭
+edit = [
+	{ run = 'nvim "$@"', block = true, desc = "Edit", for = "unix" },
+]
+
+# 定义系统默认打开器 (作为备选，用于打开图片、视频等)
+open = [
+	{ run = 'xdg-open "$@"', desc = "Open", for = "linux" },
+	{ run = 'open "$@"', desc = "Open", for = "macos" },
+]
+
+[open]
+# 2. 设置打开规则 (对应你的第二个需求)
+# rules 是按顺序匹配的，匹配到第一条就停止
+rules = [
+	# 如果是文件夹，进入文件夹
+	{ name = "*/", use = [ "edit", "open", "reveal" ] },
+
+	# 文本文件、JSON、空文件 -> 强制使用 nvim (edit)
+	{ mime = "text/*", use = [ "edit", "reveal" ] },
+	{ mime = "application/json", use = [ "edit", "reveal" ] },
+	{ mime = "inode/x-empty", use = [ "edit", "reveal" ] },
+
+	# 如果你希望大部分未识别的文件也尝试用 nvim 打开，可以解开下面这行的注释：
+	{ name = "*", use = [ "edit", "open", "reveal" ] },
+
+	# 默认兜底规则：其他文件（如图片、视频）使用系统默认方式打开，若系统打不开则尝试用 nvim
+	{ name = "*", use = [ "open", "edit", "reveal" ] },
+]

@@ -1,4 +1,5 @@
 return {
+	-- 自动高亮当前单词
 	{
 		"RRethy/vim-illuminate",
 		config = function()
@@ -12,11 +13,7 @@ return {
 			vim.cmd("hi IlluminatedWordText guibg=#393E4D gui=none")
 		end
 	},
-	{
-		"dkarter/bullets.vim",
-		lazy = false,
-		ft = { "markdown", "txt" },
-	},
+	-- 颜色代码的后面显示一个带颜色的小方块
 	{
 		"NvChad/nvim-colorizer.lua",
 		opts = {
@@ -43,13 +40,17 @@ return {
 			buftypes = {},
 		}
 	},
+	-- key : gs ==> 布尔值，反义词快速切换
 	{ 'theniceboy/antovim', lazy = false, },
+	-- Enter ： 选中光标所在的括号/引号内部的内容
 	{ 'gcmt/wildfire.vim',  lazy = false, },
+	-- 优化折叠功能
 	{
 		"kevinhwang91/nvim-ufo",
 		dependencies = { "kevinhwang91/promise-async", },
 		config = function() require('ufo').setup() end
 	},
+	-- 自动补全括号
 	{
 		"windwp/nvim-autopairs",
 		config = function()

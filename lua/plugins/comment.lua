@@ -8,8 +8,8 @@ return {
 		vim.cmd([[
 nmap <LEADER>cn g>c
 vmap <LEADER>cn g>
-nmap <LEADER>cu g<c
-vmap <LEADER>cu g<
+nmap <LEADER>uc g<c
+vmap <LEADER>uc g<
 unmap ic
 		]])
 	end

@@ -6,7 +6,7 @@ return {
 		priority = 1000,
 		config = function()
 			vim.cmd([[colorscheme deus]])
-			-- 自定义 Startify 的颜色，适配 nvim-deus 主题
+			-- 自定义 Startify 的颜色，适配 nvim-deu
 			-- 使用现代 Neovim Lua API 设置高亮，效果相同但更推荐
 			vim.api.nvim_set_hl(0, 'StartifyHeader',  { fg = '#c678dd', bg = 'NONE', ctermfg = 'Magenta' })
 			vim.api.nvim_set_hl(0, 'StartifyBracket', { fg = '#f0dc82', bg = 'NONE', ctermfg = 'Yellow' })

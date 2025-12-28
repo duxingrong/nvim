@@ -1,20 +1,12 @@
 # dotfile
 
-## 以下操作步骤为ubuntu22.04
-
-```bash
-cd ~/.config/
-git clone git@github.com/duxingrong/nvim.git # ssh 
-git clone https://github.com/duxingrong/nvim.git # https
-```
-
 ## 终端wezterm配置
 
 ```bash
 cd ~/.config/nvim/dependence/
 sudo dpkg -i wezterm-20240203-110809-5046fc22.Ubuntu22.04.deb
 # 移动配置文件
-mv ~/.config/nvim/dependence/wezterm/ ~/.config
+cp -r ~/.config/nvim/dependence/wezterm/ ~/.config
 ```
 
 ## 安装tmux 
@@ -22,7 +14,7 @@ mv ~/.config/nvim/dependence/wezterm/ ~/.config
 ```bash
 sudo apt install tmux 
 # 将配置文件移动到正确位置
-mv ~/.config/nvim/dependence/.tmux.conf ~/
+cp ~/.config/nvim/dependence/.tmux.conf ~/
 ```
 
 ## 安装yazi
@@ -35,6 +27,8 @@ mv ya yazi ~/.local/bin/
 echo 'export PATH=/home/du/.local/bin:$PATH' >> ~/.bashrc
 source ~/.bashrc
 rm -rf ~/.config/nvim/dependence/yazi-x86_64-unknown-linux-musl
+
+cp -r ~/.config/nvim/yazi/  ~/.config/
 ```
 
 修改yazi启动快捷按键
@@ -48,6 +42,12 @@ function ra() {
 	rm -f -- "$tmp"
 }
 ```
+## 安装cargo
+
+```
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
 
 ## 安装nvim
 ```bash
@@ -76,15 +76,11 @@ node -v
 npm -v
 ```
 
-## 安裝google
-```bash
-cd .config/nvim/dependence/
-sudo apt install ./google-chrome-stable_current_amd64.deb
+> [!NOTE]
+> 如果发现报错not found nvim-treesitter.configs],执行以下命令
+
 ```
-## 安裝clash
-```bash
-cd .config/nvim/dependence/
-sudo apt install ./Clash.Verge_2.4.1_amd64.deb
+mv /home/du/.local/share/nvim/lazy/nvim-treesitter/lua/nvim-treesitter/config.lua /home/du/.local/share/nvim/lazy/nvim-treesitter/lua/nvim-treesitter/configs.lua
 ```
 
 
